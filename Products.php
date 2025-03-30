@@ -133,6 +133,7 @@
             margin-top: 5px;
             transition: background-color 0.3s ease;
             width: 100%;
+            cursor: pointer;
         }
         .add-to-cart:hover {
             background-color: #444;
@@ -384,6 +385,16 @@
                     // Return to the first slide when mouse leaves
                     carouselInstance.to(0);
                 }
+            });
+        });
+        
+        // Add to Cart button functionality - Redirect to Cart page
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Redirect to the Cart page when Add to Cart is clicked
+                window.location.href = 'Cart.php';
             });
         });
     });
