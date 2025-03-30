@@ -14,7 +14,7 @@
         }
 
         .navbar {
-            background-color: #1E1E1E
+            background-color: #1E1E1E;
             padding: 10px 0;
         }
 
@@ -102,6 +102,27 @@
             background-color: #1E1E1E;
             color: white;
         }
+        
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .remove-btn:hover {
+            background-color: #bd2130;
+        }
+        
+        .item-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -144,10 +165,13 @@
                 <div class="flex-grow-1">
                     <h5>Test Design</h5>
                     <p>Price: ₱</p>
-                    <div class="quantity-control">
-                        <button class="btn quantity-btn">-</button>
-                        <input type="text" class="form-control mx-2 text-center" value="1" style="width: 60px;">
-                        <button class="btn quantity-btn">+</button>
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button class="btn quantity-btn">-</button>
+                            <input type="text" class="form-control mx-2 text-center" value="1" style="width: 60px;">
+                            <button class="btn quantity-btn">+</button>
+                        </div>
+                        <button class="remove-btn" id="removeItem"><i class="bi bi-trash"></i> Remove</button>
                     </div>
                 </div>
             </div>
@@ -164,6 +188,28 @@
             cartIcon.addEventListener('click', function() {
                 // Navigate to Cart.php when cart icon is clicked
                 window.location.href = 'Cart.php';
+            });
+            
+            // Remove item functionality
+            const removeButton = document.getElementById('removeItem');
+            removeButton.addEventListener('click', function() {
+                // Here you would typically send an AJAX request to remove the item
+                // For now, just remove the element from the DOM
+                const orderItem = this.closest('.order-item');
+                orderItem.remove();
+                
+                // You might want to check if cart is empty and show a message
+                const orderItems = document.querySelectorAll('.order-item');
+                if (orderItems.length === 0) {
+                    const cartContainer = document.querySelector('.cart-container');
+                    const emptyMessage = document.createElement('p');
+                    emptyMessage.textContent = 'Your cart is empty';
+                    emptyMessage.className = 'text-center mt-4';
+                    cartContainer.insertBefore(emptyMessage, document.querySelector('.checkout-btn'));
+                    
+                    // Disable checkout button
+                    document.querySelector('.checkout-btn').disabled = true;
+                }
             });
         });
     </script>
