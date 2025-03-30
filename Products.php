@@ -73,70 +73,14 @@
         <div class="row">
             <!-- Repeat this block 9 times -->
             <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
+                <div class="placeholder-design">
+                    <img src="images/TSHIRTS/altitude_1.jpg<?php echo $i; ?>.jpg" class="img-fluid w-100 h-100" alt="Product Design">
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="placeholder-design"></div>
-                <div class="text-center">
-                    <h5>Test Design</h5>
-                    <p>Price ₽</p>
-                </div>
+            <div class="text-center">
+                <h5>Test Design</h5>
+                <p>Price ₽</p>
             </div>
         </div>
-    </div>
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
