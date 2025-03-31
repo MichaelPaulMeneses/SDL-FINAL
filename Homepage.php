@@ -308,7 +308,7 @@
 
     <!-- Carousel -->
     <div class="container mt-5">
-        <div id="tshirtCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">
+        <div id="tshirtCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#tshirtCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#tshirtCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -451,7 +451,7 @@
     <div class="container-fluid">
         <div class="long-horizontal-bar">
             <div class="dark-overlay"></div>
-            <img src="image/Create/commission design.jpg" alt="Design Workshop">
+            <img src="images/Create/commission design.jpg" alt="Design Workshop">
             <div class="overlay-text">
                 <h2>Custom Design Services</h2>
                 <p>Let our expert designers bring your vision to life with our premium custom design services</p>
