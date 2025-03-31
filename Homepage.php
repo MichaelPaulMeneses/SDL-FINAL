@@ -139,6 +139,14 @@
             background-color: #B0A8B9;
             height: 450px;
             width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .design-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .pre-made-designs h2 {
@@ -162,6 +170,19 @@
         .grid-item {
             background-color: #D3D3D3;
             border: 2px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
         }
 
         .grid-item-1 {
@@ -187,6 +208,46 @@
             background-color: #E0E0E0;
             margin-top: 50px;
             margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .long-horizontal-bar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 10;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .overlay-text h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .overlay-text p {
+            font-size: 1.2rem;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        
+        .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
         }
     </style>
 </head>
@@ -247,22 +308,53 @@
 
     <!-- Carousel -->
     <div class="container mt-5">
-        <div id="tshirtCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <div id="tshirtCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#tshirtCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#tshirtCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#tshirtCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
             </div>
+            <?php
+            // Define the directory where featured banner images are stored
+            $bannerDir = "images/BANNERS/";
+            
+            // Get all files with these extensions
+            $fileTypes = array('jpg', 'jpeg', 'png', 'gif');
+            
+            // Try to get banner files from directory
+            $bannerFiles = array();
+            foreach($fileTypes as $type) {
+                $typeFiles = glob($bannerDir . "*." . $type);
+                if($typeFiles) {
+                    $bannerFiles = array_merge($bannerFiles, $typeFiles);
+                }
+            }
+            ?>
             <div class="carousel-inner">
+                <?php
+                // If banner files are found, use them in the carousel
+                if(count($bannerFiles) > 0) {
+                    foreach($bannerFiles as $index => $file) {
+                        $activeClass = ($index === 0) ? 'active' : '';
+                        echo '<div class="carousel-item ' . $activeClass . '">';
+                        echo '<img src="' . $file . '" class="d-block w-100" alt="Banner Image ' . ($index + 1) . '">';
+                        echo '</div>';
+                    }
+                } else {
+                    // Default fallback images if no files are found
+                ?>
                 <div class="carousel-item active">
-                    <img src="logo.jpg" class="d-block w-100" alt="Anime T-Shirt 1">
+                    <img src="images/TSHIRTS/bestbud_1.png" class="d-block w-100" alt="Anime T-Shirt 1">
                 </div>
                 <div class="carousel-item">
-                    <img src="/api/placeholder/800/500?text=Slide2" class="d-block w-100" alt="Anime T-Shirt 2">
+                    <img src="images/TSHIRTS/Baskn_cook_1.jpg" class="d-block w-100" alt="Anime T-Shirt 2">
                 </div>
                 <div class="carousel-item">
-                    <img src="/api/placeholder/800/500?text=Slide3" class="d-block w-100" alt="Anime T-Shirt 3">
+                    <img src="images/TSHIRTS/Baskn_cook_2.jpg" class="d-block w-100" alt="Anime T-Shirt 3">
                 </div>
+                <?php
+                }
+                ?>
             </div>
         </div>
     </div>
@@ -275,31 +367,97 @@
         </div>
     
         <div class="row g-3">
+            <?php
+            // Define the directory where T-shirt images are stored
+            $dir = "images/TSHIRTS/";
+            
+            // Try to get files from directory
+            $files = array();
+            foreach($fileTypes as $type) {
+                $typeFiles = glob($dir . "*." . $type);
+                if($typeFiles) {
+                    $files = array_merge($files, $typeFiles);
+                }
+            }
+            
+            // Display up to 3 designs on the homepage
+            $maxHomepageDisplays = 3;
+            $displayCount = 0;
+            
+            // Check if we found any real files
+            if(count($files) > 0) {
+                // Shuffle the array to show random designs on homepage
+                shuffle($files);
+                
+                // Display up to 3 designs
+                foreach($files as $file) {
+                    if($displayCount >= $maxHomepageDisplays) break;
+                    
+                    $displayCount++;
+                    $filename = basename($file);
+                    // Extract product name from filename (remove extension)
+                    $productName = pathinfo($filename, PATHINFO_FILENAME);
+                    $productName = str_replace('_', ' ', $productName);
+                    $productName = ucwords($productName);
+            ?>
             <div class="col-md-4">
-                <div class="design-placeholder"></div>
+                <div class="design-placeholder">
+                    <img src="<?php echo $file; ?>" alt="<?php echo $productName; ?>">
+                </div>
+                <div class="text-center mt-2">
+                    <h4><?php echo $productName; ?></h4>
+                </div>
             </div>
+            <?php
+                }
+            }
+            
+            // If no images found or less than 3 images, fill the rest with placeholders
+            for($i = $displayCount; $i < $maxHomepageDisplays; $i++) {
+            ?>
             <div class="col-md-4">
-                <div class="design-placeholder"></div>
+                <div class="design-placeholder">
+                    <img src="/api/placeholder/450/450?text=No+Image" alt="Design Placeholder">
+                </div>
+                <div class="text-center mt-2">
+                    <h4>Sample Design <?php echo $i+1; ?></h4>
+                </div>
             </div>
-            <div class="col-md-4">
-                <div class="design-placeholder"></div>
-            </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
 
-    <!-- Updated Grid Layout Section -->
+    <!-- Updated Grid Layout Section with Images -->
     <div class="container">
         <div class="grid-layout">
-            <div class="grid-item grid-item-1"></div>
-            <div class="grid-item grid-item-2"></div>
-            <div class="grid-item grid-item-3"></div>
-            <div class="grid-item grid-item-4"></div>
+            <div class="grid-item grid-item-1">
+                <img src="images/TSHIRTS/altitude_2.jpg" alt="Fashion Model">
+            </div>
+            <div class="grid-item grid-item-2">
+                <img src="images/TSHIRTS/altitude_1.jpg" alt="Design Process">
+            </div>
+            <div class="grid-item grid-item-3">
+                <img src="images/TSHIRTS/ayv_1.jpg" alt="Design Studio">
+            </div>
+            <div class="grid-item grid-item-4">
+                <img src="images/TSHIRTS/ayv_2.jpg" alt="Custom Designs">
+            </div>
         </div>
     </div>
 
-    <!-- Long Horizontal Bar -->
+    <!-- Long Horizontal Bar with Image -->
     <div class="container-fluid">
-        <div class="long-horizontal-bar"></div>
+        <div class="long-horizontal-bar">
+            <div class="dark-overlay"></div>
+            <img src="images/Create/commission design.jpg" alt="Design Workshop">
+            <div class="overlay-text">
+                <h2>Custom Design Services</h2>
+                <p>Let our expert designers bring your vision to life with our premium custom design services</p>
+                <a href="Commissioned.php" class="btn btn-light mt-3">Learn More</a>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
