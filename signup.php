@@ -104,7 +104,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="Homepage.php">HOME</a></li>
                     <li class="nav-item"><a class="nav-link" href="Products.php">PRODUCTS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Commissioned.php">COMMISSIONED DESIGNS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Inquiry.php">INQUIRY</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="Login.php">LOGIN</a></li>

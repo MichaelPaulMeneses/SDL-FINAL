@@ -145,7 +145,7 @@
                         <a class="nav-link" href="Products.php">PRODUCTS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Commissioned.php">COMMISSIONED DESIGNS</a>
+                        <a class="nav-link" href="Inquiry.php">INQUIRY</a>
                     </li>
                 </ul>
                     <li class="nav-item nav-icons">

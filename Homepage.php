@@ -262,7 +262,61 @@ body {
     font-family: Helvetica, sans-serif;
     font-weight: bold;
 }
+        /* Footer Styles */
+.footer {
+    background-color: #1E1E1E;
+    color: white;
+    padding: 40px 0 20px;
+    margin-top: 40px;
+}
 
+.footer h5 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    color: #4a90e2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+.social-icon i {
+    font-size: 30px;
+    color: inherit; /* Ensures icon color matches parent element */
+}
+
+
+.social-icon.facebook:hover {
+    color: #3b5998;
+}
+
+.social-icon.instagram:hover {
+    color: #e1306c;
+}
+
+@media (max-width: 767px) {
+    .footer .row {
+        text-align: center;
+    }
+    
+    .footer-text {
+        margin-bottom: 30px;
+    }
+}
 .dark-overlay {
     position: absolute;
     top: 0;
@@ -472,7 +526,44 @@ body {
                 <img src="images/TSHIRTS/ayv_2.jpg" alt="Custom Designs">
             </div>
         </div>
-    </div>z
+    </div>
+
+<!-- Footer -->
+<footer class="footer mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                    <img id="footerLogo" src="assets/homepage_images/logo/placeholder.png"  width="75" class="me-2 rounded-circle">
+                    <span class="logo-text">Metro District Design</span>
+                </div>
+                <div class="footer-text text-center text-md-start">
+                    <p><i class="fas fa-map-marker-alt me-2"></i><a href="" target="_blank" style="color: white; text-decoration: none;">BASTA SA BAHAY NI JASTIN</a></p>
+                    <p><i class="fas fa-envelope me-2"></i><a href="" style="color: white; text-decoration: none;"></a></p>
+                    <p><i class="fas fa-phone me-2"></i><a href="" style="color: white; text-decoration: none;"></a> 0912 BAHALA KA NA SA WALO | <a href="4" style="color: white; text-decoration: none;"></a></p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+            <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <h5>Follow Us</h5>
+                            <a href="#" class="social-icon facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="#" class="social-icon instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center text-md-end mt-4">
+                    <p>© 2025 Metro District Design. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
