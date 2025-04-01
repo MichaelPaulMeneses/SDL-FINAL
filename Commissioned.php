@@ -172,13 +172,14 @@
             position: relative;
         }
         
+        /* Modified to cover the entire t-shirt */
         .design-area {
             position: absolute;
-            top: 35%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40%;
-            height: 40%;
+            width: 80%; /* Increased from 40% to 80% */
+            height: 80%; /* Increased from 40% to 80% */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -260,6 +261,88 @@
             background-color: #333;
             color: white;
         }
+
+        /* Canvas for image processing */
+        #processing-canvas {
+            display: none;
+        }
+        
+        /* Featured designs section */
+        .featured-designs {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .featured-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .design-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .design-card {
+            width: 180px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: white;
+        }
+        
+        .design-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .design-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+        }
+        
+        .design-card p {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Style for full-coverage image designs */
+        .full-design-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Changed from contain to cover */
+        }
+        
+        /* Upload prompt styles */
+        .upload-prompt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed #999;
+            background-color: rgba(255,255,255,0.5);
+        }
+        
+        .upload-prompt i {
+            font-size: 48px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .upload-prompt p {
+            color: #666;
+            font-weight: normal;
+            text-align: center;
+            margin: 0;
+        }
         
         /* Media queries for responsive design */
         @media (max-width: 768px) {
@@ -274,6 +357,9 @@
     </style>
 </head>
 <body>
+    <!-- Hidden canvas for image processing -->
+    <canvas id="processing-canvas"></canvas>
+    
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
@@ -328,7 +414,11 @@
                 <div class="tshirt-container">
                     <div class="tshirt-image" id="tshirt-bg">
                         <div class="design-area" id="design-display">
-                            Your Design Here
+                            <!-- Empty design area - will be filled by user upload -->
+                            <div class="upload-prompt">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                <p>Upload your design to preview</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -338,17 +428,22 @@
             <div class="preview-section">
                 <div class="design-preview">
                     <div class="design-only" id="design-only-preview">
-                        Your Design Here
+                        <!-- Empty preview area - will be filled by user upload -->
+                        <div class="upload-prompt">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                            <p>Design preview will appear here</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="options-section">
                     <div class="option-title">Color</div>
                     <div class="color-options">
-                        <div class="color-option active" style="background-color: white;" onclick="changeColor('white')"></div>
-                        <div class="color-option" style="background-color: black;" onclick="changeColor('black')"></div>
+                        <div class="color-option" style="background-color: white;" onclick="changeColor('white')"></div>
+                        <div class="color-option active" style="background-color: black;" onclick="changeColor('black')"></div>
                         <div class="color-option" style="background-color: #ff6b6b;" onclick="changeColor('#ff6b6b')"></div>
                         <div class="color-option" style="background-color: #4ecdc4;" onclick="changeColor('#4ecdc4')"></div>
+                        <div class="color-option" style="background-color: #aaaaaa;" onclick="changeColor('#aaaaaa')"></div>
                     </div>
                     
                     <div class="option-title">Size</div>
@@ -358,6 +453,12 @@
                         <div class="size-option" onclick="changeSize('L')">L</div>
                         <div class="size-option" onclick="changeSize('XL')">XL</div>
                     </div>
+                    
+                    <div class="option-title">Design Coverage</div>
+                    <div class="size-options">
+                        <div class="size-option" onclick="changeCoverage('partial')">Partial</div>
+                        <div class="size-option active" onclick="changeCoverage('full')">Full</div>
+                    </div>
                 </div>
                 
                 <div class="upload-section">
@@ -365,7 +466,30 @@
                     <button onclick="previewDesign()">Preview</button>
                 </div>
                 
-                <button class="download-btn">Download</button>
+                <button class="download-btn">Add to Cart</button>
+            </div>
+        </div>
+        
+        <!-- Featured Designs Section -->
+        <div class="featured-designs">
+            <h2 class="featured-title">Featured Designs</h2>
+            <div class="design-options">
+                <div class="design-card" onclick="uploadPrompt()">
+                    <img src="/api/placeholder/180/150" alt="Upload Your Design">
+                    <p>Upload Your Design</p>
+                </div>
+                <div class="design-card" onclick="uploadPrompt()">
+                    <img src="/api/placeholder/180/150" alt="Custom Design">
+                    <p>Custom Design</p>
+                </div>
+                <div class="design-card" onclick="uploadPrompt()">
+                    <img src="/api/placeholder/180/150" alt="Personalized Design">
+                    <p>Personalize It</p>
+                </div>
+                <div class="design-card" onclick="uploadPrompt()">
+                    <img src="/api/placeholder/180/150" alt="Your Creation">
+                    <p>Your Creation</p>
+                </div>
             </div>
         </div>
     </div>
@@ -374,23 +498,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Initialize with white t-shirt
+        // Track the current coverage setting
+        let currentCoverage = 'full';
+        
+        // Initialize with black t-shirt
         document.addEventListener('DOMContentLoaded', function() {
             initializeTshirt();
             setupSearchToggle();
+            // Initially set to black t-shirt
+            changeColor('black');
         });
         
         function initializeTshirt() {
             const tshirtBg = document.getElementById('tshirt-bg');
-            tshirtBg.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"350\" viewBox=\"0 0 300 350\"><path d=\"M100,10 L50,60 L20,40 L60,120 L60,340 L240,340 L240,120 L280,40 L250,60 L200,10 Z\" fill=\"white\" stroke=\"%23ddd\" stroke-width=\"2\"/></svg>')";
-            
-            // Set design area to default
-            const designArea = document.getElementById('design-display');
-            designArea.innerHTML = 'Your Design Here';
-            
-            // Set design-only preview to default
-            const designOnlyPreview = document.getElementById('design-only-preview');
-            designOnlyPreview.innerHTML = 'Your Design Here';
+            // Improved t-shirt SVG with more realistic shape
+            tshirtBg.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"350\" viewBox=\"0 0 300 350\"><defs><linearGradient id=\"shading\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgba(0,0,0,0.1);stop-opacity:1\" /><stop offset=\"50%\" style=\"stop-color:rgba(255,255,255,0);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgba(0,0,0,0.1);stop-opacity:1\" /></linearGradient></defs><path d=\"M150,10 C120,10 100,20 85,35 L45,70 L15,45 C15,45 60,120 60,120 L60,340 L240,340 L240,120 C240,120 285,45 285,45 L255,70 L215,35 C200,20 180,10 150,10 Z\" fill=\"black\" stroke=\"%23333\" stroke-width=\"2\"/><path d=\"M148,10 C120,12 95,25 85,35 L85,80 C85,80 115,70 150,70 C185,70 215,80 215,80 L215,35 C205,25 180,12 152,10 Z\" fill=\"url(%23shading)\" stroke=\"none\"/><path d=\"M60,120 L60,125 L240,125 L240,120 L285,45 C285,45 240,115 240,115 L60,115 C60,115 15,45 15,45 L60,120 Z\" fill=\"rgba(0,0,0,0.05)\" stroke=\"none\"/><path d=\"M75,35 L90,10 L105,35\" stroke=\"%23444\" stroke-width=\"1\" fill=\"none\"/><path d=\"M225,35 L210,10 L195,35\" stroke=\"%23444\" stroke-width=\"1\" fill=\"none\"/></svg>')";
         }
         
         function setupSearchToggle() {
@@ -426,15 +548,9 @@
             // Change the t-shirt color by updating the SVG fill color
             const encodedColor = encodeURIComponent(color);
             const tshirtBg = document.getElementById('tshirt-bg');
-            tshirtBg.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"350\" viewBox=\"0 0 300 350\"><path d=\"M100,10 L50,60 L20,40 L60,120 L60,340 L240,340 L240,120 L280,40 L250,60 L200,10 Z\" fill=\"${encodedColor}\" stroke=\"%23ddd\" stroke-width=\"2\"/></svg>')`;
             
-            // Adjust text color for better visibility
-            const designArea = document.getElementById('design-display');
-            if (color === 'black') {
-                designArea.style.color = 'white';
-            } else {
-                designArea.style.color = '#333';
-            }
+            // Improved t-shirt SVG with shading and more realistic shape
+            tshirtBg.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"350\" viewBox=\"0 0 300 350\"><defs><linearGradient id=\"shading\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgba(0,0,0,0.1);stop-opacity:1\" /><stop offset=\"50%\" style=\"stop-color:rgba(255,255,255,0);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgba(0,0,0,0.1);stop-opacity:1\" /></linearGradient></defs><path d=\"M150,10 C120,10 100,20 85,35 L45,70 L15,45 C15,45 60,120 60,120 L60,340 L240,340 L240,120 C240,120 285,45 285,45 L255,70 L215,35 C200,20 180,10 150,10 Z\" fill=\"${encodedColor}\" stroke=\"%23333\" stroke-width=\"2\"/><path d=\"M148,10 C120,12 95,25 85,35 L85,80 C85,80 115,70 150,70 C185,70 215,80 215,80 L215,35 C205,25 180,12 152,10 Z\" fill=\"url(%23shading)\" stroke=\"none\"/><path d=\"M60,120 L60,125 L240,125 L240,120 L285,45 C285,45 240,115 240,115 L60,115 C60,115 15,45 15,45 L60,120 Z\" fill=\"rgba(0,0,0,0.05)\" stroke=\"none\"/><path d=\"M75,35 L90,10 L105,35\" stroke=\"%23444\" stroke-width=\"1\" fill=\"none\"/><path d=\"M225,35 L210,10 L195,35\" stroke=\"%23444\" stroke-width=\"1\" fill=\"none\"/></svg>`;
             
             console.log("Changed color to: " + color);
         }
@@ -443,13 +559,56 @@
             // Update active size selection
             const sizeOptions = document.querySelectorAll('.size-option');
             sizeOptions.forEach(option => {
-                option.classList.remove('active');
-                if (option.innerText === size) {
-                    option.classList.add('active');
+                if (option.parentElement.classList.contains('size-options') && 
+                    !option.parentElement.previousElementSibling.textContent.includes('Coverage')) {
+                    option.classList.remove('active');
+                    if (option.innerText === size) {
+                        option.classList.add('active');
+                    }
                 }
             });
             
             console.log("Changed size to: " + size);
+        }
+        
+        function changeCoverage(coverage) {
+            // Update active coverage selection
+            const coverageOptions = document.querySelectorAll('.size-options:last-of-type .size-option');
+            coverageOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.innerText.toLowerCase() === coverage) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // Store current coverage setting
+            currentCoverage = coverage;
+            
+            // Update design area size
+            const designArea = document.getElementById('design-display');
+            if (coverage === 'full') {
+                designArea.style.width = '80%';
+                designArea.style.height = '80%';
+                designArea.style.top = '50%';
+            } else {
+                designArea.style.width = '40%';
+                designArea.style.height = '40%';
+                designArea.style.top = '40%';
+            }
+            
+            console.log("Changed coverage to: " + coverage);
+            
+            // Refresh the upload prompt or maintain current design if one is uploaded
+            if (document.querySelector('.full-design-img')) {
+                // A design is already uploaded, adjust it for the new coverage
+                const img = document.querySelector('.full-design-img');
+                img.style.objectFit = currentCoverage === 'full' ? 'cover' : 'contain';
+            }
+        }
+        
+        function uploadPrompt() {
+            // When a design card is clicked, focus on the file input
+            document.getElementById('design-upload').click();
         }
         
         function previewDesign() {
@@ -457,13 +616,30 @@
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Update the design on the t-shirt
-                    const designArea = document.getElementById('design-display');
-                    designArea.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%;">`;
-                    
-                    // Update the design-only preview
-                    const designOnlyPreview = document.getElementById('design-only-preview');
-                    designOnlyPreview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%;">`;
+                    const img = new Image();
+                    img.onload = function() {
+                        // Update the design on the t-shirt
+                        const designArea = document.getElementById('design-display');
+                        designArea.innerHTML = '';
+                        
+                        const designImg = document.createElement('img');
+                        designImg.src = e.target.result;
+                        designImg.className = 'full-design-img';
+                        designImg.style.objectFit = currentCoverage === 'full' ? 'cover' : 'contain';
+                        designArea.appendChild(designImg);
+                        
+                        // Update the design-only preview
+                        const designOnlyPreview = document.getElementById('design-only-preview');
+                        designOnlyPreview.innerHTML = '';
+                        
+                        const previewImg = document.createElement('img');
+                        previewImg.src = e.target.result;
+                        previewImg.style.maxWidth = '100%';
+                        previewImg.style.maxHeight = '100%';
+                        previewImg.style.objectFit = 'contain';
+                        designOnlyPreview.appendChild(previewImg);
+                    };
+                    img.src = e.target.result;
                 }
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
