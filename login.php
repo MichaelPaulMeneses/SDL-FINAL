@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $user['username'];
             
             // Redirect to dashboard or homepage
-            header("Location: Homepage.php");
+            header("Location: Homepage_loggedin.php");
             exit();
         } else {
             // Invalid password
