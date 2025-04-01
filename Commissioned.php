@@ -161,6 +161,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: width 0.3s, height 0.3s;
         }
         
         .tshirt-image {
@@ -178,8 +179,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%; /* Increased from 40% to 80% */
-            height: 80%; /* Increased from 40% to 80% */
+            width: 90%; /* Increased from 80% to 90% */
+            height: 90%; /* Increased from 80% to 90% */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -187,6 +188,7 @@
             font-weight: bold;
             overflow: hidden;
             text-align: center;
+            transition: width 0.3s, height 0.3s;
         }
         
         .design-only {
@@ -500,11 +502,14 @@
     <script>
         // Track the current coverage setting
         let currentCoverage = 'full';
+        let currentSize = 'M';
         
         // Initialize with black t-shirt
         document.addEventListener('DOMContentLoaded', function() {
             initializeTshirt();
             setupSearchToggle();
+            setupCartButton();
+            setupFileUpload();
             // Initially set to black t-shirt
             changeColor('black');
         });
@@ -535,6 +540,27 @@
             });
         }
         
+        function setupCartButton() {
+            // Set up the cart icon to go to cart page
+            document.getElementById('cartIcon').addEventListener('click', function() {
+                window.location.href = 'Cart.php';
+            });
+            
+            // Set up the Add to Cart button
+            document.querySelector('.download-btn').addEventListener('click', function() {
+                window.location.href = 'Cart.php';
+            });
+        }
+        
+        function setupFileUpload() {
+            // Auto-preview when a file is selected
+            document.getElementById('design-upload').addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    document.querySelector('.upload-section button').click();
+                }
+            });
+        }
+        
         function changeColor(color) {
             // Update active color selection
             const colorOptions = document.querySelectorAll('.color-option');
@@ -556,17 +582,55 @@
         }
         
         function changeSize(size) {
+            // Update current size
+            currentSize = size;
+            
             // Update active size selection
-            const sizeOptions = document.querySelectorAll('.size-option');
-            sizeOptions.forEach(option => {
-                if (option.parentElement.classList.contains('size-options') && 
-                    !option.parentElement.previousElementSibling.textContent.includes('Coverage')) {
-                    option.classList.remove('active');
-                    if (option.innerText === size) {
-                        option.classList.add('active');
-                    }
+            const sizeOptions = document.querySelectorAll('.size-options');
+            sizeOptions.forEach(sizeGroup => {
+                if (!sizeGroup.previousElementSibling.textContent.includes('Coverage')) {
+                    const options = sizeGroup.querySelectorAll('.size-option');
+                    options.forEach(option => {
+                        option.classList.remove('active');
+                        if (option.innerText === size) {
+                            option.classList.add('active');
+                        }
+                    });
                 }
             });
+            
+            // Get the t-shirt container
+            const tshirtContainer = document.querySelector('.tshirt-container');
+            
+            // Adjust t-shirt size based on selection
+            switch(size) {
+                case 'S':
+                    tshirtContainer.style.width = '70%';
+                    tshirtContainer.style.height = '70%';
+                    break;
+                case 'M':
+                    tshirtContainer.style.width = '80%';
+                    tshirtContainer.style.height = '80%';
+                    break;
+                case 'L':
+                    tshirtContainer.style.width = '90%';
+                    tshirtContainer.style.height = '90%';
+                    break;
+                case 'XL':
+                    tshirtContainer.style.width = '100%';
+                    tshirtContainer.style.height = '100%';
+                    break;
+            }
+            
+            // Adjust design area proportionally
+            const designArea = document.getElementById('design-display');
+            if (currentCoverage === 'full') {
+                designArea.style.width = '90%';
+                designArea.style.height = '90%';
+            } else {
+                designArea.style.width = '40%';
+                designArea.style.height = '40%';
+            }
             
             console.log("Changed size to: " + size);
         }
@@ -587,8 +651,8 @@
             // Update design area size
             const designArea = document.getElementById('design-display');
             if (coverage === 'full') {
-                designArea.style.width = '80%';
-                designArea.style.height = '80%';
+                designArea.style.width = '90%';
+                designArea.style.height = '90%';
                 designArea.style.top = '50%';
             } else {
                 designArea.style.width = '40%';
@@ -618,12 +682,15 @@
                 reader.onload = function(e) {
                     const img = new Image();
                     img.onload = function() {
+                        // Process the image to extract just the design
+                        const processedImageUrl = processImage(img);
+                        
                         // Update the design on the t-shirt
                         const designArea = document.getElementById('design-display');
                         designArea.innerHTML = '';
                         
                         const designImg = document.createElement('img');
-                        designImg.src = e.target.result;
+                        designImg.src = processedImageUrl;
                         designImg.className = 'full-design-img';
                         designImg.style.objectFit = currentCoverage === 'full' ? 'cover' : 'contain';
                         designArea.appendChild(designImg);
@@ -633,7 +700,7 @@
                         designOnlyPreview.innerHTML = '';
                         
                         const previewImg = document.createElement('img');
-                        previewImg.src = e.target.result;
+                        previewImg.src = processedImageUrl;
                         previewImg.style.maxWidth = '100%';
                         previewImg.style.maxHeight = '100%';
                         previewImg.style.objectFit = 'contain';
@@ -646,6 +713,109 @@
                 alert("Please select an image to upload");
             }
         }
+        
+        // Function to process the image and extract just the design
+        function processImage(img) {
+            // Get the hidden canvas element for processing
+            const canvas = document.getElementById('processing-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size to match image dimensions
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            // Draw the original image
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Auto-detect background color by sampling the corners
+            const corners = [
+                {x: 0, y: 0},                           // top-left
+                {x: canvas.width - 1, y: 0},            // top-right
+                {x: 0, y: canvas.height - 1},           // bottom-left
+                {x: canvas.width - 1, y: canvas.height - 1}  // bottom-right
+            ];
+            
+            // Sample the corner pixels to determine background color
+            let bgR = 0, bgG = 0, bgB = 0;
+            corners.forEach(corner => {
+                const index = (corner.y * canvas.width + corner.x) * 4;
+                bgR += data[index];
+                bgG += data[index + 1];
+                bgB += data[index + 2];
+            });
+            
+            // Average the corner colors
+            bgR = Math.round(bgR / 4);
+            bgG = Math.round(bgG / 4);
+            bgB = Math.round(bgB / 4);
+            
+            // Set transparency for pixels close to the background color
+            const threshold = 20; // Reduced from 30 to 20 for better design preservation
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                
+                // Calculate color distance using Euclidean distance
+                const distance = Math.sqrt(
+                    Math.pow(r - bgR, 2) +
+                    Math.pow(g - bgG, 2) +
+                    Math.pow(b - bgB, 2)
+                );
+                
+                // If close to background color, make transparent
+                if (distance < threshold) {
+                    data[i + 3] = 0; // Set alpha to 0 (transparent)
+                }
+            }
+            
+            // Put the processed image data back on the canvas
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Return the data URL of the processed image
+            return canvas.toDataURL('image/png');
+        }
+        
+        // Handle search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim().toLowerCase();
+                if (searchTerm) {
+                    // Redirect to search results page
+                    window.location.href = `Search.php?q=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        });
+        
+        // Function to handle adding to cart
+        document.querySelector('.download-btn').addEventListener('click', function() {
+            const designImage = document.querySelector('.full-design-img');
+            if (!designImage) {
+                alert('Please upload and preview a design before adding to cart');
+                return;
+            }
+            
+            // Collect product details
+            const productDetails = {
+                type: 'commissioned',
+                size: currentSize,
+                color: document.querySelector('.color-option.active').style.backgroundColor,
+                coverage: currentCoverage,
+                designUrl: designImage.src
+            };
+            
+            // Store in localStorage for cart functionality
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(productDetails);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Show confirmation and update cart icon
+            alert('Design added to cart successfully!');
+        });
     </script>
 </body>
 </html>
