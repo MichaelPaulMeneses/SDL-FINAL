@@ -9,8 +9,14 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
+        * {
+            font-family: Helvetica, sans-serif;
+        }
+        
         body {
-            background-color: #E5E4E2; 
+            background-color: #E5E4E2;
+            font-family: Helvetica, sans-serif;
+            font-weight: bold; 
         }
         .navbar-custom {
             background-color: #1E1E1E; 
@@ -52,6 +58,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 25px;
             position: relative;
+            font-family: Helvetica, sans-serif;
         }
         .product-card:hover {
             transform: translateY(-10px);
@@ -80,14 +87,17 @@
         .product-info {
             padding: 15px;
             text-align: center;
+            font-family: Helvetica,  sans-serif;
         }
         .product-info h5 {
             margin-bottom: 5px;
             font-weight: 600;
+            font-family: Helvetica,  sans-serif;
         }
         .product-info p {
             color: #555;
             font-weight: bold;
+            font-family: Helvetica,  sans-serif;
         }
         .quick-view {
             position: absolute;
@@ -101,6 +111,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             cursor: pointer;
+            font-family: Helvetica,  sans-serif;
         }
         .carousel-indicators {
             margin-bottom: 0;
@@ -134,6 +145,7 @@
             transition: background-color 0.3s ease;
             width: 100%;
             cursor: pointer;
+            font-family: Helvetica, sans-serif;
         }
         .add-to-cart:hover {
             background-color: #444;
@@ -148,6 +160,13 @@
             border-radius: 4px;
             font-weight: bold;
             z-index: 1;
+            font-family: Helvetica, sans-serif;
+        }
+        h2 {
+            font-family: Helvetica, sans-serif;
+        }
+        button, .btn {
+            font-family: Helvetica, sans-serif;
         }
     </style>
 </head>
@@ -161,7 +180,7 @@
             <div class="mx-auto">
                 <a href="Homepage.php" class="nav-link d-inline-block">HOME</a>
                 <a href="Products.php" class="nav-link d-inline-block">PRODUCTS</a>
-                <a href="Commissioned.php" class="nav-link d-inline-block">COMMISSIONED DESIGNS</a>
+                <a href="Inquiry.php" class="nav-link d-inline-block">INQUIRY</a>
             </div>
             <div>
                 <a href="Signup.php" class="login-links">SIGN-UP</a>
@@ -354,6 +373,13 @@
             }
             ?>
         </div>
+    </div>
+    <div class="container py-4">
+        <h2 class="mb-4">PRE-MADE DESIGN</h2>
+    </div>
+
+    <div class="container py-4">
+        <h2 class="mb-4">COMMISSIONED DESIGN</h2>
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
