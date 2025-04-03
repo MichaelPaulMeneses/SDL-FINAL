@@ -168,6 +168,29 @@
         button, .btn {
             font-family: Helvetica, sans-serif;
         }
+        /* Category header styles */
+        .category-header {
+            padding: 15px 20px;
+            margin: 20px 0;
+            background-color: #1E1E1E;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        .category-header:hover {
+            background-color: #444;
+        }
+        .category-header h2 {
+            margin: 0;
+            font-weight: bold;
+        }
+        .category-header i {
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body class="content">
@@ -190,8 +213,12 @@
     </nav>
 
     <div class="container py-4">
-        <h2 class="mb-4">ALL PRODUCTS</h2>
-        <div class="row">
+        <div class="category-header" id="allProductsHeader" onclick="toggleCategory('allProducts')">
+            <h2>ALL PRODUCTS</h2>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        
+        <div class="row" id="allProducts">
             <?php
             // Define the directory where T-shirt images are stored
             $dir = "images/TSHIRTS/";
@@ -374,12 +401,129 @@
             ?>
         </div>
     </div>
-    <div class="container py-4">
-        <h2 class="mb-4">PRE-MADE DESIGN</h2>
+
+    <div class="container py-2">
+        <div class="category-header" id="premadeHeader" onclick="toggleCategory('premadeDesigns')">
+            <h2>PRE-MADE DESIGN</h2>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        
+        <div class="row" id="premadeDesigns">
+            <?php
+            // Sample premade designs
+            $premadeProducts = array(
+                array("name" => "Urban Metro Collection", "price" => "19.99", "badge" => "Popular"),
+                array("name" => "City Skyline Series", "price" => "22.99", "badge" => "Bestseller"),
+                array("name" => "District Line Art", "price" => "18.99", "badge" => "New"),
+                array("name" => "Metro Transit Map", "price" => "24.99", "badge" => ""),
+                array("name" => "Downtown Express", "price" => "21.99", "badge" => "Sale"),
+                array("name" => "Urban Geometry", "price" => "23.99", "badge" => "Limited")
+            );
+            
+            // Display premade products
+            foreach($premadeProducts as $index => $product) {
+                $productCount++;
+            ?>
+            <div class="col-md-4 mb-4">
+                <div class="product-card">
+                    <?php if(!empty($product["badge"])): ?>
+                    <div class="product-badge"><?php echo $product["badge"]; ?></div>
+                    <?php endif; ?>
+                    
+                    <div id="productCarousel<?php echo $productCount; ?>" class="carousel slide" data-bs-interval="false">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#productCarousel<?php echo $productCount; ?>" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#productCarousel<?php echo $productCount; ?>" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#productCarousel<?php echo $productCount; ?>" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="placeholder-design">
+                                    <img src="/api/placeholder/300/250" alt="Premade Design Front">
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="placeholder-design">
+                                    <img src="/api/placeholder/300/250" alt="Premade Design Back">
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="placeholder-design">
+                                    <img src="/api/placeholder/300/250" alt="Premade Design Detail">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel<?php echo $productCount; ?>" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel<?php echo $productCount; ?>" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <div class="quick-view">
+                            <i class="bi bi-eye"></i> Quick View
+                        </div>
+                    </div>
+                    
+                    <div class="product-info">
+                        <h5><?php echo $product["name"]; ?></h5>
+                        <p>$<?php echo $product["price"]; ?></p>
+                        <button class="add-to-cart">
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
     </div>
 
-    <div class="container py-4">
-        <h2 class="mb-4">COMMISSIONED DESIGN</h2>
+    <div class="container py-2">
+        <div class="category-header" id="commissionedHeader" onclick="toggleCategory('commissionedDesigns')">
+            <h2>COMMISSIONED DESIGN</h2>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        
+        <div class="row" id="commissionedDesigns">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Custom Design Service</h4>
+                        <p class="card-text">Work with our professional designers to create a unique design just for you.</p>
+                        <ul>
+                            <li>Personal consultation</li>
+                            <li>Multiple revision rounds</li>
+                            <li>High-quality digital files</li>
+                            <li>Printing on premium materials</li>
+                        </ul>
+                        <p class="fw-bold">Starting at $49.99</p>
+                        <a href="CustomDesign.php" class="btn btn-dark w-100">Start Your Custom Design</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Bulk Order Commission</h4>
+                        <p class="card-text">Perfect for teams, events, or businesses needing multiple items with custom designs.</p>
+                        <ul>
+                            <li>Volume discounts available</li>
+                            <li>Consistent quality across all items</li>
+                            <li>Rush service available</li>
+                            <li>Dedicated project manager</li>
+                        </ul>
+                        <p class="fw-bold">Get a custom quote for your project</p>
+                        <a href="BulkOrder.php" class="btn btn-dark w-100">Request Bulk Order Quote</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 mt-3 text-center">
+                <a href="CommissionedDesign.php" class="btn btn-lg btn-outline-dark">Learn More About Custom Design Services</a>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
@@ -423,6 +567,23 @@
                 window.location.href = 'Cart.php';
             });
         });
+        
+        // Toggle category sections
+        window.toggleCategory = function(categoryId) {
+            const categoryElement = document.getElementById(categoryId);
+            const headerElement = document.getElementById(categoryId + 'Header');
+            
+            if (categoryElement.style.display === 'none') {
+                categoryElement.style.display = 'flex';
+                categoryElement.style.flexWrap = 'wrap';
+                headerElement.querySelector('i').classList.remove('bi-chevron-right');
+                headerElement.querySelector('i').classList.add('bi-chevron-down');
+            } else {
+                categoryElement.style.display = 'none';
+                headerElement.querySelector('i').classList.remove('bi-chevron-down');
+                headerElement.querySelector('i').classList.add('bi-chevron-right');
+            }
+        }
     });
     </script>
 </body>
